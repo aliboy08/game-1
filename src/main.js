@@ -5,6 +5,7 @@ import Platform from './entities/platform/platform';
 import { platform_collision } from './entities/platform/functions';
 import { apply_gravity } from './components/gravity';
 import { apply_bounds } from './components/bounds';
+import { objects_collision } from './components/collision';
 
 window.addEventListener('load', ()=>{
 
@@ -22,6 +23,8 @@ window.addEventListener('load', ()=>{
     ctx.imageSmoothingQuality = 'high';
 
     const entities = [];
+
+    const entities_with_collision = [];
     
     const platforms = [
         new Platform({ x: 0, y: 100 }),
@@ -55,7 +58,10 @@ window.addEventListener('load', ()=>{
             x: 200
         }),
     ];
-    players.forEach(entity=>entities.push(entity));
+    players.forEach(entity=>{
+        entities.push(entity)
+        entities_with_collision.push(entity)
+    });
 
     const monsters = [
         new Monster({
@@ -65,7 +71,7 @@ window.addEventListener('load', ()=>{
         new Monster({
             model: 'Orc_Warrior',
             direction: 'right',
-            x: 460,
+            x: 560,
         }),
         new Monster({
             model: 'Orc_Shaman',
@@ -74,19 +80,22 @@ window.addEventListener('load', ()=>{
         new Monster({
             model: 'Orc_Shaman',
             direction: 'right',
-            x: 80,
+            x: 120,
         }),
         new Monster({
             model: 'Orc_Berserk',
-            x: 550,
+            x: 700,
         }),
         new Monster({
             model: 'Orc_Berserk',
             direction: 'right',
-            x: 610,
+            x: 800,
         }),
     ];
-    monsters.forEach(entity=>entities.push(entity));
+    monsters.forEach(entity=>{
+        entities.push(entity)
+        entities_with_collision.push(entity)
+    });
 
     let frame_time = {
         previous: 0,
@@ -111,6 +120,8 @@ window.addEventListener('load', ()=>{
         
         platform_collision(players, platforms)
         platform_collision(monsters, platforms)
+
+        objects_collision(entities_with_collision);
 
         update_entities(frame_time);
         

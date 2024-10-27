@@ -54,7 +54,6 @@ export default class Monster {
     update(time){
         this.update_bounds();
         this.update_sprite(time);
-        this.debugger.update();
     }
 
     draw(ctx){

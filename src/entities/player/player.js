@@ -30,8 +30,6 @@ export default class Player {
             y: 0,
         }
         
-        
-        
         this.jump_force = 550;
         this.animation_timer = 0;
         
@@ -64,7 +62,6 @@ export default class Player {
         this.update_bounds();
         this.movement.update(time);
         this.update_sprite(time);
-        this.debugger.update();
     }
 
     draw(ctx){

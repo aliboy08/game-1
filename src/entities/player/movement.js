@@ -3,10 +3,9 @@ export default class Movement {
     constructor(player){
         this.player = player;
 
+        this.player.is_moving = false;
         this.player.is_jumping = false;
 
-        this.is_moving = false;
-        this.is_jumping = false;
         this.is_running = false;
         this.toggle_run = false;
     }
@@ -16,23 +15,23 @@ export default class Movement {
     }
     
     backward(){
-        this.is_moving = true;
+        this.player.is_moving = true;
         this.player.state = 'Walk';
         this.player.direction = 'left';
         this.player.velocity.x = -this.player.speed.move;
 
-        if( this.is_jumping ) {
+        if( this.player.is_jumping ) {
             this.player.state = 'Jump';
         }
     }
 
     forward(){
-        this.is_moving = true;
+        this.player.is_moving = true;
         this.player.state = 'Walk';
         this.player.direction = 'right';
         this.player.velocity.x = this.player.speed.move;
 
-        if( this.is_jumping ) {
+        if( this.player.is_jumping ) {
             this.player.state = 'Jump';
         }
     }
@@ -42,8 +41,8 @@ export default class Movement {
     }
 
     jump(){
-        if( this.is_jumping ) return;
-        this.is_jumping = true;
+        if( this.player.is_jumping ) return;
+        this.player.is_jumping = true;
         this.player.state = 'Jump';
         this.player.velocity.y = - this.player.jump_force;
         this.player.is_grounded = false;
@@ -51,8 +50,8 @@ export default class Movement {
 
     jump_end(){
         
-        this.is_jumping = false;
-        if( this.is_moving ) {
+        this.player.is_jumping = false;
+        if( this.player.is_moving ) {
             this.player.state = 'Walk';
         }
         else {
@@ -71,14 +70,18 @@ export default class Movement {
     movement_end(){
         this.player.velocity.x = 0;
         this.player.state = 'Idle';
-        this.is_moving = false;
+        this.player.is_moving = false;
+    }
+
+    stop(){
+        this.movement_end();
     }
 
     check_run(){
 
         if( this.toggle_run ) {
     
-            if( !this.is_moving ) return;
+            if( !this.player.is_moving ) return;
             if( this.is_running ) return;
             this.is_running = true;
             
@@ -94,7 +97,7 @@ export default class Movement {
             this.toggle_run = false;
             this.is_running = false;
 
-            if( !this.is_moving ) return;
+            if( !this.player.is_moving ) return;
             
             if( this.player.direction == 'right' ) {
                 this.player.velocity.x = this.player.speed.move;
@@ -112,7 +115,7 @@ export default class Movement {
     }
 
     check_jump_end(){
-        if( !this.is_jumping ) return;
+        if( !this.player.is_jumping ) return;
         if( !this.player.is_grounded ) return;
         this.jump_end();
     }
