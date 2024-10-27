@@ -1,4 +1,4 @@
-export const sprites_data = {
+export const sprites_data_player = {
     Samurai: {
         frame_width: 128,
         frame_height: 128,

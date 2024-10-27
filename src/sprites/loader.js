@@ -1,19 +1,31 @@
-import { sprites_data } from './data';
+import { sprites_data_player } from './player/sprites_data_player';
+import { sprites_data_monsters } from './monsters/sprites_data_monsters';
 
-export default function sprites_loader(model_name){
+export default function sprites_loader(model_name, type){
 
-    const model = sprites_data[model_name];
+    let dir, model;
+
+    if( type == 'player' ) {
+        dir = '/src/sprites/player/';
+        model = sprites_data_player[model_name];
+    }
+    else if (type == 'monster') {
+        dir = '/src/sprites/monsters/';
+        model = sprites_data_monsters[model_name];
+    }
 
     const sprites = {
         frame_width: model.frame_width,
         frame_height: model.frame_height,
         ready: false,
+        offset: model.offset ?? null,
     }
 
-    let states = Object.keys(model.states)
+    let states = Object.keys(model.states);
 
     let sprites_loaded = 0;
     states.forEach(state=>{
+
         sprites[state] = {
             index: 0,
             frames_count: model.states[state].frames_count,
@@ -28,7 +40,7 @@ export default function sprites_loader(model_name){
                 sprites.ready = true;
             }
         }
-        img.src = `/src/sprites/${model_name}/${state}.png`;
+        img.src = `${dir+model_name}/${state}.png`;
 
         sprites[state].img = img;
     })

@@ -1,29 +1,26 @@
-import Movement from './movement';
-import Attacks from './attacks';
-import Controls from './controls';
 import sprites_loader from '../../sprites/loader';
 import Debugger from '../../components/debugger';
 
-export default class Player {
+export default class Monster {
 
     constructor(options){
 
-        this.model = options.model ?? 'Samurai';
+        this.model = options.model ?? 'Orc_Warrior';
         this.state = 'Idle';
-        this.direction = options.direction ?? 'right';
+        this.direction = options.direction ?? 'left';
 
-        this.width = options.width ?? 26;
-        this.height = options.height ?? 74;
+        this.width = options.width ?? 42;
+        this.height = options.height ?? 60;
 
         this.position = {
             x: options.x ?? 0,
             y: options.y ?? 0,
         }
 
-        this.speed = {
-            move: 200,
-            run: 400,
-        };
+        // this.speed = {
+        //     move: 200,
+        //     run: 400,
+        // };
         
         this.velocity = {
             x: 0,
@@ -31,38 +28,31 @@ export default class Player {
         }
         
         
-        
-        this.jump_force = 550;
-        this.animation_timer = 0;
-        
-        this.sprites = sprites_loader(this.model, 'player');
+        this.sprites = sprites_loader(this.model, 'monster');
+
         this.sprites_offset = this.sprites.offset ?? {
-            y: 50,
+            y: 36,
             left: {
-                x: 52,
+                x: 36,
             },
             right: {
-                x: 50,
+                x: 20,
             },
         }
+
+        // this.jump_force = 550;
         
+        this.animation_timer = 0
         this.action = null;
         this.action_complete = true;
-        
-        this.update_bounds();
 
-        if( options.movement ?? true ) {
-            this.movement = new Movement(this);
-            this.controls = new Controls(this);
-            this.attacks = new Attacks(this);
-        }
+        this.update_bounds();
 
         this.debugger = new Debugger(this);
     }
     
     update(time){
         this.update_bounds();
-        this.movement.update(time);
         this.update_sprite(time);
         this.debugger.update();
     }
@@ -126,5 +116,6 @@ export default class Player {
         const key = this.action ? this.action : this.state;
         return this.sprites[key];
     }
+    
 
 }

@@ -1,4 +1,5 @@
 import Player from './entities/player/player';
+import Monster from './entities/monster/monster';
 import Platform from './entities/platform/platform';
 // import FPS_Counter from './components/fps_counter';
 import { platform_collision } from './entities/platform/functions';
@@ -40,21 +41,52 @@ window.addEventListener('load', ()=>{
         new Platform({ x: 750, y: 400 }),
     ];
     platforms.forEach(entity=>entities.push(entity));
-
+    
     const players = [
-        new Player({
-            model: 'Shinobi',
-        }),
-        new Player({
-            model: 'Samurai',
-            x: 100,
-        }),
+        // new Player({
+        //     model: 'Shinobi',
+        // }),
+        // new Player({
+        //     model: 'Samurai',
+        //     x: 500,
+        // }),
         new Player({
             model: 'Fighter',
             x: 200
         }),
     ];
     players.forEach(entity=>entities.push(entity));
+
+    const monsters = [
+        new Monster({
+            model: 'Orc_Warrior',
+            x: 400,
+        }),
+        new Monster({
+            model: 'Orc_Warrior',
+            direction: 'right',
+            x: 460,
+        }),
+        new Monster({
+            model: 'Orc_Shaman',
+            x: 20,
+        }),
+        new Monster({
+            model: 'Orc_Shaman',
+            direction: 'right',
+            x: 80,
+        }),
+        new Monster({
+            model: 'Orc_Berserk',
+            x: 550,
+        }),
+        new Monster({
+            model: 'Orc_Berserk',
+            direction: 'right',
+            x: 610,
+        }),
+    ];
+    monsters.forEach(entity=>entities.push(entity));
 
     let frame_time = {
         previous: 0,
@@ -63,21 +95,35 @@ window.addEventListener('load', ()=>{
     
     function frame(time){
     
-        requestAnimationFrame(frame); // raf - at top: sooner it can respond
+        requestAnimationFrame(frame);
         
-        frame_time.seconds_passed = (time - frame_time.previous) / 1000;
-        frame_time.previous = time;
-    
-        // clear 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // for consistent fps on different refresh rates
+        update_frame_time(time);
+        
+        clear_canvas();
         
         apply_gravity(players, frame_time)
+        apply_gravity(monsters, frame_time)
+
+        // top, right, left, bottom
         apply_bounds(players, canvas)
+        apply_bounds(monsters, canvas)
+        
         platform_collision(players, platforms)
+        platform_collision(monsters, platforms)
 
         update_entities(frame_time);
         
         draw_entities();
+    }
+
+    function update_frame_time(time){
+        frame_time.seconds_passed = (time - frame_time.previous) / 1000;
+        frame_time.previous = time;
+    }
+
+    function clear_canvas(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     function update_entities(time){
