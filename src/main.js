@@ -156,7 +156,13 @@ window.addEventListener('load', ()=>{
     }
 
     function clean_up_dead(arrays){
-        
+        for( const arr of arrays ) {
+            for( let i = 0; i < arr.length; i++ ) {
+                if( arr[i].queue_remove ) {
+                    arr.splice(i, 1);
+                }
+            }
+        }
     }
 
     requestAnimationFrame(frame);

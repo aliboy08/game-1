@@ -13,26 +13,50 @@ export default class Attacks {
     }
 
     attack_1(){
-        const action = 'Attack_1';
-        this.player.action = action;
+        this.player.action = 'Attack_1';
         
         this.action = {
-            name: action,
+            name: this.player.action,
             x: this.player.direction == 'right' ? this.player.bounds.right : this.player.bounds.left - this.player.width,
             y: this.player.bounds.top+20,
             width: 25,
             height: 10,
         }
 
-        this.check_hit();
+        this.on_attack();
     }
     
     attack_2(){
         this.player.action = 'Attack_2';
+
+        this.action = {
+            name: this.player.action,
+            x: this.player.direction == 'right' ? this.player.bounds.right : this.player.bounds.left - this.player.width,
+            y: this.player.bounds.top+20,
+            width: 25,
+            height: 10,
+        }
+
+        this.on_attack();
     }
 
     attack_3(){
         this.player.action = 'Attack_3';
+
+        this.action = {
+            name: this.player.action,
+            x: this.player.direction == 'right' ? this.player.bounds.right : this.player.bounds.left - this.player.width,
+            y: this.player.bounds.top+20,
+            width: 25,
+            height: 10,
+        }
+
+        this.on_attack();
+
+    }
+
+    on_attack(){
+        this.check_hit();
     }
 
     // update(){

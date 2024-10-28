@@ -155,6 +155,7 @@ export default class Monster {
     
     check_is_hit(){
         if( !this.is_hit ) return;
+        if( this.is_dead ) return;
         this.action = 'Hurt';
         this.health--;
 
@@ -170,7 +171,9 @@ export default class Monster {
     }
 
     after_death_animation(){
-        
+        setTimeout(()=>{
+            this.queue_remove = true;
+        }, 2000);
     }
 
 }
