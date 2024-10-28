@@ -17,6 +17,10 @@ export default class Monster {
             y: options.y ?? 0,
         }
 
+        this.health = 30;
+
+        this.update_bounds();
+
         // this.speed = {
         //     move: 200,
         //     run: 400,
@@ -27,9 +31,8 @@ export default class Monster {
             y: 0,
         }
         
-        
+        this.animation_timer = 0
         this.sprites = sprites_loader(this.model, 'monster');
-
         this.sprites_offset = this.sprites.offset ?? {
             y: 36,
             left: {
@@ -42,18 +45,22 @@ export default class Monster {
 
         // this.jump_force = 550;
         
-        this.animation_timer = 0
         this.action = null;
         this.action_complete = true;
-
-        this.update_bounds();
+        
+        this.is_hit = false;
 
         this.debugger = new Debugger(this);
+
+        this.last_frame = false;
+
+        this.with_collision = true;
     }
     
     update(time){
         this.update_bounds();
         this.update_sprite(time);
+        this.check_is_hit();
     }
 
     draw(ctx){
@@ -96,6 +103,8 @@ export default class Monster {
 
     update_sprite(time){
 
+        if( this.last_frame ) return;
+
         const sprite_action = this.get_sprite();
         
         if( time.previous > this.animation_timer + sprite_action.animation_time ) {
@@ -104,9 +113,27 @@ export default class Monster {
 
             // cycle through frames
             sprite_action.index++;
+
             if( sprite_action.index == sprite_action.frames_count) {
+                
+                if( sprite_action.name == 'Dead' ) {
+                    sprite_action.index--;
+                    this.after_death_animation();
+                    return;
+                }
+                
                 sprite_action.index = 0;
-                this.action = null;
+                
+                if( this.action ) {
+                    
+                    if( typeof this.action_complete == 'function' ) {
+                        this.action_complete(this.action);
+                    }
+
+                    this.on_action_animation_complete();
+
+                    this.action = null;
+                }
             }
         }
     }
@@ -115,6 +142,35 @@ export default class Monster {
         const key = this.action ? this.action : this.state;
         return this.sprites[key];
     }
+
+    on_action_complete(handler){
+        this.action_complete = handler;
+    }
+
+    on_action_animation_complete(){
+        if( this.action == 'Hurt' ) {
+            this.is_hit = false;
+        }
+    }
     
+    check_is_hit(){
+        if( !this.is_hit ) return;
+        this.action = 'Hurt';
+        this.health--;
+
+        if( this.health <= 0 ) {
+            this.dead();
+        }
+    }
+
+    dead(){
+        this.state = 'Dead';
+        this.with_collision = false;
+        this.is_dead = true;
+    }
+
+    after_death_animation(){
+        
+    }
 
 }

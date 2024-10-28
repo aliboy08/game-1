@@ -45,28 +45,13 @@ window.addEventListener('load', ()=>{
     ];
     platforms.forEach(entity=>entities.push(entity));
     
-    const players = [
-        // new Player({
-        //     model: 'Shinobi',
-        // }),
-        // new Player({
-        //     model: 'Samurai',
-        //     x: 500,
-        // }),
-        new Player({
-            model: 'Fighter',
-            x: 200
-        }),
-    ];
-    players.forEach(entity=>{
-        entities.push(entity)
-        entities_with_collision.push(entity)
-    });
+    
 
     const monsters = [
         new Monster({
             model: 'Orc_Warrior',
             x: 400,
+            y: canvas.height,
         }),
         new Monster({
             model: 'Orc_Warrior',
@@ -97,6 +82,26 @@ window.addEventListener('load', ()=>{
         entities_with_collision.push(entity)
     });
 
+    const players = [
+        // new Player({
+        //     model: 'Shinobi',
+        // }),
+        // new Player({
+        //     model: 'Samurai',
+        //     x: 500,
+        // }),
+        new Player({
+            model: 'Fighter',
+            x: 200,
+            y: canvas.height
+        }),
+    ];
+    players.forEach(entity=>{
+        entity.attacks.targets = monsters;
+        entities.push(entity)
+        entities_with_collision.push(entity)
+    });
+
     let frame_time = {
         previous: 0,
         seconds_passed: 0,
@@ -105,6 +110,8 @@ window.addEventListener('load', ()=>{
     function frame(time){
     
         requestAnimationFrame(frame);
+
+        clean_up_dead([ entities, monsters, entities_with_collision ]);
         
         // for consistent fps on different refresh rates
         update_frame_time(time);
@@ -122,7 +129,6 @@ window.addEventListener('load', ()=>{
         platform_collision(monsters, platforms)
 
         objects_collision(entities_with_collision);
-
         update_entities(frame_time);
         
         draw_entities();
@@ -147,6 +153,10 @@ window.addEventListener('load', ()=>{
         for(const entity of entities) {
             entity.draw(ctx);
         }
+    }
+
+    function clean_up_dead(arrays){
+        
     }
 
     requestAnimationFrame(frame);

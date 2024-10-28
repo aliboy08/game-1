@@ -31,3 +31,28 @@ export function check_bounds(player, bounds){
         }
     } 
 }
+
+export function get_bounds(object){
+    return {
+        top: object.y,
+        right: object.x + object.width,
+        bottom: object.y + object.height,
+        left: object.x,
+    }
+}
+
+export function bounds_intersecting(a, b){
+
+    if( a.top > b.bottom ) return false;
+    if( a.bottom < b.top ) return false; 
+
+    if( a.right < b.right && a.right >= b.left ) {
+        return true; // a - facing right
+    }
+
+    if( a.right > b.right && a.left <= b.right ) {
+        return true; // a - facing left
+    }
+
+    return false;
+}

@@ -27,6 +27,7 @@ export default function sprites_loader(model_name, type){
     states.forEach(state=>{
 
         sprites[state] = {
+            name: state,
             index: 0,
             frames_count: model.states[state].frames_count,
             animation_time: model.states[state].animation_time ?? 60,

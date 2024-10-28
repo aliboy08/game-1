@@ -20,6 +20,8 @@ export default class Player {
             y: options.y ?? 0,
         }
 
+        this.update_bounds();
+
         this.speed = {
             move: 200,
             run: 400,
@@ -31,8 +33,8 @@ export default class Player {
         }
         
         this.jump_force = 550;
-        this.animation_timer = 0;
         
+        this.animation_timer = 0;
         this.sprites = sprites_loader(this.model, 'player');
         this.sprites_offset = this.sprites.offset ?? {
             y: 50,
@@ -47,13 +49,16 @@ export default class Player {
         this.action = null;
         this.action_complete = true;
         
-        this.update_bounds();
+       
 
         if( options.movement ?? true ) {
             this.movement = new Movement(this);
             this.controls = new Controls(this);
-            this.attacks = new Attacks(this);
         }
+
+        this.attacks = new Attacks(this);
+
+        this.is_hit = false;
 
         this.debugger = new Debugger(this);
     }
@@ -62,6 +67,7 @@ export default class Player {
         this.update_bounds();
         this.movement.update(time);
         this.update_sprite(time);
+        // this.attacks.update(time);
     }
 
     draw(ctx){
@@ -90,6 +96,8 @@ export default class Player {
             ctx.drawImage(sprite.img, sx, sy, w, h, x, y, w, h); 
         }
 
+        this.attacks.draw(ctx);
+
         this.debugger.draw(ctx);
     }
 
@@ -114,7 +122,17 @@ export default class Player {
             sprite_action.index++;
             if( sprite_action.index == sprite_action.frames_count) {
                 sprite_action.index = 0;
-                this.action = null;
+
+                if( this.action ) {
+
+                    if( typeof this.action_complete == 'function' ) {
+                        this.action_complete(this.action);
+                    }
+
+                    this.on_action_animation_complete();
+
+                    this.action = null;
+                }
             }
         }
     }
@@ -124,4 +142,12 @@ export default class Player {
         return this.sprites[key];
     }
 
+    on_action_complete(handler){
+        this.action_complete = handler;
+    }
+
+    on_action_animation_complete(){
+
+    }
+    
 }

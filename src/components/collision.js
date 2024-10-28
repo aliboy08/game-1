@@ -9,11 +9,14 @@ export function objects_collision(objects){
         for( const object of objects ) {
 
             if( current == object ) continue;
+            if( !object.with_collision ) continue;  
             
             const colliding = is_colliding( current, object );
 
             current.is_colliding = colliding;
             object.is_colliding = colliding;
+
+            if( current.velocity.y < 0 ) continue; // allow jump away
 
             if( colliding == 'left' && current.direction == 'left' ) {
                 current.position.x = object.bounds.right;
