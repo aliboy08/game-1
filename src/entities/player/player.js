@@ -67,7 +67,7 @@ export default class Player {
         this.update_bounds();
         this.movement.update(time);
         this.update_sprite(time);
-        // this.attacks.update(time);
+        this.attacks.update(time);
     }
 
     draw(ctx){

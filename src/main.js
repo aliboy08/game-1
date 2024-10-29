@@ -45,8 +45,6 @@ window.addEventListener('load', ()=>{
     ];
     platforms.forEach(entity=>entities.push(entity));
     
-    
-
     const monsters = [
         new Monster({
             model: 'Orc_Warrior',
