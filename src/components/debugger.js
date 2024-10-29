@@ -33,8 +33,12 @@ export default class Debugger {
     }
 
     draw_bounds(ctx){
+
+        const { width, height } = this.entity;
+        const { x, y } = this.entity.position;
+        
         ctx.beginPath();
-        ctx.rect(this.entity.bounds.left, this.entity.bounds.top, this.entity.width, this.entity.height);
+        ctx.rect(x, y, width, height);
         ctx.stroke();
     }
 
@@ -42,7 +46,8 @@ export default class Debugger {
         if( !this.entity.attacks ) return;
         if( !this.entity.attacks.action ) return;
 
-        const { x, y, width, height } = this.entity.attacks.action;
+        const { width, height } = this.entity.attacks.action;
+        const { x, y } = this.entity.attacks.action.position;
 
         ctx.beginPath();
         ctx.rect(x, y, width, height);

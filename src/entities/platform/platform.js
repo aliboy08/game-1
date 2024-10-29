@@ -1,3 +1,5 @@
+import { get_bounds } from '../../lib/functions';
+
 export default class Platform {
 
     constructor(options){
@@ -6,16 +8,9 @@ export default class Platform {
             x: options.x ?? 0,
             y: options.y ?? 0,
         }
-
         this.width = options.width ?? 100;
         this.height = options.height ?? 5;
-
-        this.bounds = {
-            top: this.position.y,
-            right: this.position.x + this.width,
-            left: this.position.x,
-            bottom: this.position.y + this.height,
-        }
+        this.bounds = get_bounds(this);
     }
 
     update(){

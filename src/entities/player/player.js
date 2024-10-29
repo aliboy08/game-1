@@ -3,6 +3,8 @@ import Attacks from './attacks';
 import Controls from './controls';
 import sprites_loader from '../../sprites/loader';
 import Debugger from '../../components/debugger';
+import { draw_sprites_player, update_sprites_player } from '../../sprites/player/functions';
+import { get_bounds } from '../../lib/functions';
 
 export default class Player {
 
@@ -20,7 +22,7 @@ export default class Player {
             y: options.y ?? 0,
         }
 
-        this.update_bounds();
+        this.bounds = get_bounds(this);
 
         this.speed = {
             move: 200,
@@ -49,8 +51,6 @@ export default class Player {
         this.action = null;
         this.action_complete = true;
         
-       
-
         if( options.movement ?? true ) {
             this.movement = new Movement(this);
             this.controls = new Controls(this);
@@ -64,7 +64,7 @@ export default class Player {
     }
     
     update(time){
-        this.update_bounds();
+        this.bounds = get_bounds(this);
         this.movement.update(time);
         this.update_sprite(time);
         this.attacks.update(time);
@@ -74,72 +74,15 @@ export default class Player {
 
         if( !this.sprites.ready ) return;
 
-        const sprite = this.get_sprite();
-        
-        const w = this.sprites.frame_width;
-        const h = this.sprites.frame_height;
-        const sx = w * sprite.index;
-        const sy = 0;
-
-        const x = this.position.x - this.sprites_offset[this.direction].x;
-        const y = this.position.y - this.sprites_offset.y;
-
-        if( this.direction == 'left' ) {
-            // flip: direction - left
-            ctx.save()
-            ctx.scale(-1, 1)
-            ctx.drawImage(sprite.img, sx, sy, w, h, -x-w, y, w, h)
-            ctx.restore()
-        }
-        else {
-            // default: direction - right
-            ctx.drawImage(sprite.img, sx, sy, w, h, x, y, w, h); 
-        }
+        draw_sprites_player(ctx, this);
 
         this.attacks.draw(ctx);
 
         this.debugger.draw(ctx);
     }
 
-    update_bounds(){
-        this.bounds = {
-            top: this.position.y,
-            right: this.position.x + this.width,
-            bottom: this.position.y + this.height,
-            left: this.position.x,
-        }
-    }
-
     update_sprite(time){
-
-        const sprite_action = this.get_sprite();
-        
-        if( time.previous > this.animation_timer + sprite_action.animation_time ) {
-
-            this.animation_timer = time.previous;
-
-            // cycle through frames
-            sprite_action.index++;
-            if( sprite_action.index == sprite_action.frames_count) {
-                sprite_action.index = 0;
-
-                if( this.action ) {
-
-                    if( typeof this.action_complete == 'function' ) {
-                        this.action_complete(this.action);
-                    }
-
-                    this.on_action_animation_complete();
-
-                    this.action = null;
-                }
-            }
-        }
-    }
-
-    get_sprite(){
-        const key = this.action ? this.action : this.state;
-        return this.sprites[key];
+        update_sprites_player(time, this);
     }
 
     on_action_complete(handler){
@@ -147,7 +90,7 @@ export default class Player {
     }
 
     on_action_animation_complete(){
-
+        
     }
     
 }

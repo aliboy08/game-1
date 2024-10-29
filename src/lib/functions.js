@@ -1,22 +1,3 @@
-export function get_canvas_bounds(canvas){
-
-    const sprites_offset = {
-        left: 45,
-        right: 85,
-    }
-
-    const ground_height = 10;
-
-    const bounds = {
-        top: 0,
-        left: 0 - sprites_offset.left,
-        right: canvas.width - sprites_offset.right,
-        bottom: canvas.height - ground_height,
-    }
-
-    return bounds;
-}
-
 export function check_bounds(player, bounds){
     // edge left
     if( player.direction == 'left' ) {
@@ -34,10 +15,10 @@ export function check_bounds(player, bounds){
 
 export function get_bounds(object){
     return {
-        top: object.y,
-        right: object.x + object.width,
-        bottom: object.y + object.height,
-        left: object.x,
+        top: object.position.y,
+        right: object.position.x + object.width,
+        bottom: object.position.y + object.height,
+        left: object.position.x,
     }
 }
 
