@@ -1,6 +1,7 @@
-import { get_bounds, bounds_intersecting } from '../../lib/functions';
+import { get_bounds, bounds_intersecting, remove_item } from '../../lib/functions';
 import { sprites_data_effects } from '../../sprites/effects/sprites_data_effects';
 import { draw_sprites_effects, update_sprites_effects } from '../../sprites/effects/functions';
+import Projectiles from '../projectiles/projectiles';
 
 export default class Attacks {
 
@@ -17,6 +18,11 @@ export default class Attacks {
         this.hit_effect = null;
 
         this.animation_timer = 0;
+
+        this.projectiles = new Projectiles({
+            player: this.player,
+            velocity: 100,
+        });
     }
 
     attack_1(){
@@ -41,6 +47,7 @@ export default class Attacks {
     }
     
     attack_2(){
+
         this.player.action = 'Attack_2';
 
         this.action = {
@@ -52,6 +59,12 @@ export default class Attacks {
             width: 25,
             height: 10,
         }
+        
+        if( !this.projectiles.targets.length ) {
+            this.projectiles.targets = this.targets;
+        }
+
+        this.projectiles.fire();
 
         // this.attack_effect = {
         //     attacker: this.player,
@@ -80,22 +93,32 @@ export default class Attacks {
         };
 
         this.on_attack();
-
     }
 
     on_attack(){
         this.check_hit();
     }
 
-    update(time){
+    update(time, ctx){
         update_sprites_effects(time, this);
-        if( !this.action ) return;
+
+        this.projectiles.update(time);
+
+        if( this.action ) {
+
+        }
     }
 
     draw(ctx){
+
         draw_sprites_effects(ctx, this);
-        if( !this.action ) return;
-        if(typeof this.action.draw === 'function') this.action.draw(ctx);
+        
+        this.projectiles.draw(ctx);
+
+        if( this.action ) {
+            if(typeof this.action.draw === 'function') this.action.draw(ctx);
+        }
+        
     }
 
     check_hit(){

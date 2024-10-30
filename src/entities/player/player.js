@@ -63,11 +63,11 @@ export default class Player {
         this.debugger = new Debugger(this);
     }
     
-    update(time){
+    update(time, ctx){
         this.bounds = get_bounds(this);
         this.movement.update(time);
         this.update_sprite(time);
-        this.attacks.update(time);
+        this.attacks.update(time, ctx);
     }
 
     draw(ctx){

@@ -37,3 +37,11 @@ export function bounds_intersecting(a, b){
 
     return false;
 }
+
+export function remove_item(arr, item_to_remove){
+    arr.forEach((item, i)=>{
+        if( item == item_to_remove ) {
+            arr.splice(i, 1);
+        }
+    })
+}

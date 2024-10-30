@@ -14,6 +14,8 @@ window.addEventListener('load', ()=>{
     canvas.height = 500;
     
     const ctx = canvas.getContext('2d');
+
+    console.log(ctx)
     
     // debug outline
     ctx.strokeStyle = "green";
