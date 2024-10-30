@@ -1,5 +1,17 @@
+import Effects from './effects';
+
 import { remove_item, get_bounds, bounds_intersecting } from '../../lib/functions';
 import Projectile from './projectile';
+
+const lightning_orb = new Effects({
+    src: '/src/sprites/effects/lightning_orb.png',
+    cols: 5,
+    rows: 2,
+    offset: {
+        x: 40,
+        y: 40,
+    },
+});
 
 export default class Projectiles {
     
@@ -10,6 +22,8 @@ export default class Projectiles {
 
         this.items = [];
         this.targets = [];
+
+        this.hit_effect = lightning_orb;
     }
 
     fire(){
@@ -30,6 +44,8 @@ export default class Projectiles {
 
     update(time){
 
+        this.hit_effect.update(time);
+
         if( !this.items.length ) return;
         
         this.items.forEach(item=>{
@@ -45,7 +61,11 @@ export default class Projectiles {
     }
 
     draw(ctx){
+
+        this.hit_effect.draw(ctx);
+
         if( !this.items.length ) return;
+
         this.items.forEach(item=>{
             item.draw(ctx);
         })
@@ -65,6 +85,8 @@ export default class Projectiles {
             
             if( bounds_intersecting( bounds, target.bounds ) ) {
                 target.is_hit = true;
+
+                this.hit_effect.animate(projectile);
                 
                 if( projectile.direction == 'right' ) {
                     target.position.x += 5;

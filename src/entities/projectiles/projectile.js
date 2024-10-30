@@ -1,3 +1,5 @@
+import { get_bounds } from '../../lib/functions';
+
 export default class Projectile {
     
     constructor(options){
@@ -27,6 +29,8 @@ export default class Projectile {
             y: options.position.y,
         }
 
+        this.bounds = get_bounds(this);
+
         this.is_done = false;
     }
 
@@ -43,8 +47,10 @@ export default class Projectile {
     }
 
     update(time){
-
+        
         if( this.is_done ) return;
+
+        this.bounds = get_bounds(this);
 
         let x = this.velocity * time.seconds_passed;
         this.position.x += x;

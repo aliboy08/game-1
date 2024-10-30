@@ -21,7 +21,7 @@ export default class Attacks {
 
         this.projectiles = new Projectiles({
             player: this.player,
-            velocity: 100,
+            velocity: 300,
         });
     }
 
@@ -87,10 +87,10 @@ export default class Attacks {
             height: 10,
         }
 
-        this.attack_effect = {
-            attacker: this.player,
-            effect: sprites_data_effects.lightning_orb,
-        };
+        // this.attack_effect = {
+        //     attacker: this.player,
+        //     effect: sprites_data_effects.lightning_orb,
+        // };
 
         this.on_attack();
     }
