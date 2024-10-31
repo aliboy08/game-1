@@ -6,6 +6,8 @@ import Debugger from '../../components/debugger';
 import { draw_sprites_player, update_sprites_player } from '../../sprites/player/functions';
 import { get_bounds } from '../../lib/functions';
 
+import Health_Bar from '../../components/health_bar';
+
 export default class Player {
 
     constructor(options){
@@ -60,7 +62,8 @@ export default class Player {
 
         this.is_hit = false;
 
-        this.debugger = new Debugger(this);
+        // this.health_bar = new Health_Bar(this);
+        // this.debugger = new Debugger(this);
     }
     
     update(time, ctx){
@@ -68,6 +71,8 @@ export default class Player {
         this.movement.update(time);
         this.update_sprite(time);
         this.attacks.update(time, ctx);
+
+        if( this.health_bar ) this.health_bar.update();
     }
 
     draw(ctx){
@@ -78,7 +83,8 @@ export default class Player {
 
         this.attacks.draw(ctx);
 
-        this.debugger.draw(ctx);
+        if( this.health_bar ) this.health_bar.draw(ctx);
+        if( this.debugger ) this.debugger.draw(ctx);
     }
 
     update_sprite(time){

@@ -1,5 +1,6 @@
 import sprites_loader from '../../sprites/loader';
 import Debugger from '../../components/debugger';
+import Health_Bar from '../../components/health_bar';
 
 export default class Monster {
 
@@ -55,12 +56,16 @@ export default class Monster {
         this.last_frame = false;
 
         this.with_collision = true;
+
+        this.health_bar = new Health_Bar(this);
     }
     
     update(time){
         this.update_bounds();
         this.update_sprite(time);
         this.check_is_hit();
+
+        if( this.health_bar ) this.health_bar.update();
     }
 
     draw(ctx){
@@ -89,7 +94,9 @@ export default class Monster {
             ctx.drawImage(sprite.img, sx, sy, w, h, x, y, w, h); 
         }
 
-        this.debugger.draw(ctx);
+        if( this.health_bar ) this.health_bar.draw(ctx);
+        if( this.debugger ) this.debugger.draw(ctx);
+        
     }
 
     update_bounds(){

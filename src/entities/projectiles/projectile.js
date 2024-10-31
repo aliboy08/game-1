@@ -44,12 +44,10 @@ export default class Projectile {
 
         if( this.sprite ) this.sprite.draw(ctx, this);
 
-        const { x, y } = this.position;
-        
-        ctx.beginPath();
-        ctx.rect(x, y, this.width, this.height);
-        ctx.stroke();
-
+        // const { x, y } = this.position;
+        // ctx.beginPath();
+        // ctx.rect(x, y, this.width, this.height);
+        // ctx.stroke();
     }
 
     update(time){
