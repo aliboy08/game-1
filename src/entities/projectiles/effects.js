@@ -32,7 +32,6 @@ export default class Effects {
     animate(target){
         this.animation_complete = false;
         this.target = target;
-        console.log('animate', target)
     }
 
     draw(ctx){

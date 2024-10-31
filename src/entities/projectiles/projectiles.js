@@ -1,7 +1,11 @@
 import Effects from './effects';
 
 import { remove_item, get_bounds, bounds_intersecting } from '../../lib/functions';
+
 import Projectile from './projectile';
+import Projectile_Sprite from './projectile_sprite';
+
+import { sprite_images_loader } from '../../sprites/functions';
 
 const lightning_orb = new Effects({
     src: '/src/sprites/effects/lightning_orb.png',
@@ -11,6 +15,11 @@ const lightning_orb = new Effects({
         x: 40,
         y: 40,
     },
+});
+
+const water_projectile = sprite_images_loader({
+    base_image_path: 'src/sprites/effects/water_projectile/water1000',
+    frames_count: 20,
 });
 
 export default class Projectiles {
@@ -37,6 +46,10 @@ export default class Projectiles {
             height: 20,
             velocity: this.velocity,
             direction: this.player.direction,
+            sprite: new Projectile_Sprite({
+                sprite: water_projectile,
+                scale: .13,
+            }),
         });
 
         this.items.push(projectile);
@@ -82,6 +95,8 @@ export default class Projectiles {
         const bounds = get_bounds(projectile);
 
         for( const target of this.targets ) {
+
+            if( target.is_dead ) continue;
             
             if( bounds_intersecting( bounds, target.bounds ) ) {
                 target.is_hit = true;
@@ -95,7 +110,10 @@ export default class Projectiles {
                     target.position.x -= 5;
                 }
 
-                projectile.end();
+                if( typeof projectile.end === 'function' ) {
+                    projectile.end();
+                }
+                
             }
         }
     }

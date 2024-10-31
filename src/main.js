@@ -108,13 +108,14 @@ window.addEventListener('load', ()=>{
     }
     
     function frame(time){
-    
+        
         requestAnimationFrame(frame);
 
         clean_up_dead([ entities, monsters, entities_with_collision ]);
         
         // for consistent fps on different refresh rates
-        update_frame_time(time);
+        frame_time.seconds_passed = (time - frame_time.previous) / 1000;
+        frame_time.previous = time;
         
         clear_canvas();
         
@@ -132,11 +133,6 @@ window.addEventListener('load', ()=>{
         update_entities(frame_time);
         
         draw_entities();
-    }
-
-    function update_frame_time(time){
-        frame_time.seconds_passed = (time - frame_time.previous) / 1000;
-        frame_time.previous = time;
     }
 
     function clear_canvas(){
@@ -166,4 +162,5 @@ window.addEventListener('load', ()=>{
     }
 
     requestAnimationFrame(frame);
+
 })

@@ -31,6 +31,10 @@ export default class Projectile {
 
         this.bounds = get_bounds(this);
 
+        // this.image = options.image ?? null;
+
+        this.sprite = options.sprite ?? null;
+
         this.is_done = false;
     }
 
@@ -38,8 +42,10 @@ export default class Projectile {
 
         if( this.is_done ) return;
 
-        const { x, y } = this.position;
+        if( this.sprite ) this.sprite.draw(ctx, this);
 
+        const { x, y } = this.position;
+        
         ctx.beginPath();
         ctx.rect(x, y, this.width, this.height);
         ctx.stroke();
@@ -50,6 +56,8 @@ export default class Projectile {
         
         if( this.is_done ) return;
 
+        if( this.sprite ) this.sprite.update(time, this);
+
         this.bounds = get_bounds(this);
 
         let x = this.velocity * time.seconds_passed;
@@ -57,7 +65,7 @@ export default class Projectile {
         this.distance.total += x;
 
         if( Math.abs(this.distance.total) >= this.distance.max ) {
-            this.end = true;
+            this.is_done = true;
         }
     }
 
