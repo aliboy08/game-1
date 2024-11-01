@@ -1,12 +1,9 @@
 const floor_height = 48;
 
-
-const tile = {
-    img: new Image(),
-    width: 48,
-    height: 48,
-}
-tile.img.src = 'src/sprites/environment/nature/PNG/tiles/tile45.png';
+const img = new Image();
+img.src = 'src/sprites/environment/nature/PNG/tiles/tile45.png';
+img.width = 48;
+img.height = 48;
 
 export default class Floor {
 
@@ -20,18 +17,17 @@ export default class Floor {
             y: ctx.canvas.height - this.height,
         }
 
-        this.cols = this.width / tile.width;
-        
+        // this.cols = this.width / img.width;
+        this.repeat_x = Math.round(this.width / img.width);
     }
 
     draw(ctx){
         
         // repeat tiles
-        for( let i = 0; i < this.cols; i++ ) {
-            let x = tile.width * i;
+        for( let i = 0; i < this.repeat_x; i++ ) {
             ctx.drawImage(
-                tile.img,
-                x,
+                img,
+                this.position.x + (img.width * i),
                 this.position.y,
             );
         }

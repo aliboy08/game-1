@@ -15,7 +15,7 @@ export default class Projectile {
         }
 
         this.distance = {
-            max: 400,
+            max: 1000,
             total: 0,
         }
 

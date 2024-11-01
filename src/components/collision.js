@@ -3,7 +3,6 @@ export function objects_collision(objects){
     for( const current of objects ) {
 
         // if( !current.is_moving ) continue;
-
         if( !current.movement ) continue;
 
         for( const object of objects ) {

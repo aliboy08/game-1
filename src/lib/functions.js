@@ -45,3 +45,13 @@ export function remove_item(arr, item_to_remove){
         }
     })
 }
+
+export function cleanup_removed(arrays){
+    for( const arr of arrays ) {
+        for( let i = 0; i < arr.length; i++ ) {
+            if( arr[i].queue_remove ) {
+                arr.splice(i, 1);
+            }
+        }
+    }
+}

@@ -175,9 +175,14 @@ export default class Monster {
     }
 
     after_death_animation(){
-        setTimeout(()=>{
-            this.queue_remove = true;
-        }, 2000);
+        setTimeout(()=>this.remove(), 2000);
+    }
+
+    remove(){
+        this.queue_remove = true;
+        if( typeof this.on_remove === 'function' ) {
+            this.on_remove();
+        }
     }
 
 }

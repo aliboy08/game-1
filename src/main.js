@@ -1,13 +1,13 @@
 import Player from 'entities/player/player';
 import Monster from 'entities/monster/monster';
 import Platform from 'entities/platform/platform';
+import Floor from 'environment/floor';
 import { platform_collision } from 'entities/platform/functions';
 import { apply_gravity } from 'components/gravity';
 import { apply_bounds } from 'components/bounds';
 import { objects_collision } from 'components/collision';
 // import FPS_Counter from 'components/fps_counter';
-
-import Floor from 'environment/floor';
+import { remove_item } from 'lib/functions';
 
 window.addEventListener('load', ()=>{
 
@@ -16,7 +16,6 @@ window.addEventListener('load', ()=>{
     canvas.height = 500;
     
     const ctx = canvas.getContext('2d');
-
     console.log(ctx)
     
     // debug outline
@@ -25,10 +24,6 @@ window.addEventListener('load', ()=>{
     // fix scaling artifacts
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
-
-    const entities = [];
-
-    const entities_with_collision = [];
     
     const platforms = [
         new Platform({ x: 0, y: 100 }),
@@ -47,7 +42,6 @@ window.addEventListener('load', ()=>{
         new Platform({ x: 450, y: 400 }),
         new Platform({ x: 750, y: 400 }),
     ];
-    platforms.forEach(entity=>entities.push(entity));
     
     const monsters = [
         new Monster({
@@ -79,10 +73,6 @@ window.addEventListener('load', ()=>{
             x: 800,
         }),
     ];
-    monsters.forEach(entity=>{
-        entities.push(entity)
-        entities_with_collision.push(entity)
-    });
 
     const players = [
         // new Player({
@@ -98,12 +88,11 @@ window.addEventListener('load', ()=>{
             y: canvas.height
         }),
     ];
+
     players.forEach(entity=>{
         entity.attacks.targets = monsters;
-        entities.push(entity)
-        entities_with_collision.push(entity)
     });
-
+    
     let frame_time = {
         previous: 0,
         seconds_passed: 0,
@@ -112,57 +101,85 @@ window.addEventListener('load', ()=>{
     const environment = [
         new Floor(ctx),
     ];
+
+    const draw_items = [
+        environment,
+        platforms,
+        monsters,
+        players,
+    ];
+
+    const update_items = [
+        monsters,
+        players,
+    ];
+    
+    const collision_items = [];
+    collision_items.push(...monsters)
+    collision_items.push(...players)
+
+    const apply_gravity_items = [
+        monsters,
+        players,
+    ];
+
+    const apply_bounds_items = [
+        monsters,
+        players,
+    ];
     
     function frame(time){
-        
-        requestAnimationFrame(frame);
-
-        clean_up_dead([ entities, monsters, entities_with_collision ]);
-        
         // for consistent fps on different refresh rates
         frame_time.seconds_passed = (time - frame_time.previous) / 1000;
         frame_time.previous = time;
-        
-        clear_canvas();
-        
-        apply_gravity(players, frame_time)
-        apply_gravity(monsters, frame_time)
+        requestAnimationFrame(frame);
+        update();
+        draw();
+    }
+    
+    function update(){
+
+        // gravity
+        apply_gravity_items.forEach(group=>{
+            apply_gravity(group, frame_time);
+        })
 
         // top, right, left, bottom
-        apply_bounds(players, canvas)
-        apply_bounds(monsters, canvas)
+        apply_bounds_items.forEach(group=>{
+            apply_bounds(group, canvas);
+        })
         
-        platform_collision(players, platforms)
-        platform_collision(monsters, platforms)
+        // collision
+        platform_collision(players, platforms);
+        platform_collision(monsters, platforms);
+        objects_collision(collision_items);
 
-        objects_collision(entities_with_collision);
-        update_entities(frame_time);
-        
-        // draw
-        environment.forEach(i=>i.draw(ctx));
-        entities.forEach(i=>i.draw(ctx));
+        update_items.forEach(group=>{
+            group.forEach(item=>{
+                item.update(frame_time, ctx);
+            })
+        })
     }
-
-    function clear_canvas(){
+    
+    function draw(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function update_entities(time){
-        for(const entity of entities) {
-            entity.update(time, ctx, entities);
-        }
-    }
-
-    function clean_up_dead(arrays){
-        for( const arr of arrays ) {
-            for( let i = 0; i < arr.length; i++ ) {
-                if( arr[i].queue_remove ) {
-                    arr.splice(i, 1);
-                }
-            }
-        }
+        draw_items.forEach(group=>{
+            group.forEach(item=>item.draw(ctx));
+        })
     }
 
     requestAnimationFrame(frame);
 
+    // cleanup on remove
+    monsters.forEach(item=>{
+        item.on_remove = ()=>{
+            remove_item(monsters, item);
+            remove_item(draw_items, item);
+            remove_item(update_items, item);
+            remove_item(collision_items, item);
+            remove_item(apply_bounds_items, item);
+            remove_item(apply_gravity_items, item);
+        }
+    });
+    
 })
