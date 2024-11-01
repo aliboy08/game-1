@@ -1,4 +1,4 @@
-import { get_bounds } from '../../lib/functions';
+import { get_bounds } from 'lib/functions';
 
 export default class Projectile {
     

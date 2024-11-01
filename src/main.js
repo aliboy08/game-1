@@ -1,11 +1,13 @@
-import Player from './entities/player/player';
-import Monster from './entities/monster/monster';
-import Platform from './entities/platform/platform';
-// import FPS_Counter from './components/fps_counter';
-import { platform_collision } from './entities/platform/functions';
-import { apply_gravity } from './components/gravity';
-import { apply_bounds } from './components/bounds';
-import { objects_collision } from './components/collision';
+import Player from 'entities/player/player';
+import Monster from 'entities/monster/monster';
+import Platform from 'entities/platform/platform';
+import { platform_collision } from 'entities/platform/functions';
+import { apply_gravity } from 'components/gravity';
+import { apply_bounds } from 'components/bounds';
+import { objects_collision } from 'components/collision';
+// import FPS_Counter from 'components/fps_counter';
+
+import Floor from 'environment/floor';
 
 window.addEventListener('load', ()=>{
 
@@ -107,6 +109,10 @@ window.addEventListener('load', ()=>{
         seconds_passed: 0,
     }
     
+    const environment = [
+        new Floor(ctx),
+    ];
+    
     function frame(time){
         
         requestAnimationFrame(frame);
@@ -132,7 +138,9 @@ window.addEventListener('load', ()=>{
         objects_collision(entities_with_collision);
         update_entities(frame_time);
         
-        draw_entities();
+        // draw
+        environment.forEach(i=>i.draw(ctx));
+        entities.forEach(i=>i.draw(ctx));
     }
 
     function clear_canvas(){
@@ -142,12 +150,6 @@ window.addEventListener('load', ()=>{
     function update_entities(time){
         for(const entity of entities) {
             entity.update(time, ctx, entities);
-        }
-    }
-
-    function draw_entities(){
-        for(const entity of entities) {
-            entity.draw(ctx);
         }
     }
 

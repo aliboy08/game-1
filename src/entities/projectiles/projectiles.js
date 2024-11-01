@@ -1,11 +1,9 @@
+import { remove_item, get_bounds, bounds_intersecting } from 'lib/functions';
+import { sprite_images_loader } from 'sprites/functions';
+
 import Effects from './effects';
-
-import { remove_item, get_bounds, bounds_intersecting } from '../../lib/functions';
-
 import Projectile from './projectile';
 import Projectile_Sprite from './projectile_sprite';
-
-import { sprite_images_loader } from '../../sprites/functions';
 
 const lightning_orb = new Effects({
     src: '/src/sprites/effects/lightning_orb.png',

@@ -1,4 +1,4 @@
-const ground_height = 10;
+const ground_height = 50;
 
 export function apply_bounds(players, canvas){
 

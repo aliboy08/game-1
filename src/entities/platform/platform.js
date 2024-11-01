@@ -1,4 +1,4 @@
-import { get_bounds } from '../../lib/functions';
+import { get_bounds } from 'lib/functions';
 
 export default class Platform {
 
@@ -13,9 +13,7 @@ export default class Platform {
         this.bounds = get_bounds(this);
     }
 
-    update(){
-        
-    }
+    update(){}
 
     draw(ctx){
         ctx.beginPath();

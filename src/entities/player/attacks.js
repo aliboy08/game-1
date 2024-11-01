@@ -1,7 +1,7 @@
-import { get_bounds, bounds_intersecting, remove_item } from '../../lib/functions';
-import { sprites_data_effects } from '../../sprites/effects/sprites_data_effects';
-import { draw_sprites_effects, update_sprites_effects } from '../../sprites/effects/functions';
-import Projectiles from '../projectiles/projectiles';
+import { get_bounds, bounds_intersecting } from 'lib/functions';
+import { sprites_data_effects } from 'sprites/effects/sprites_data_effects';
+import { draw_sprites_effects, update_sprites_effects } from 'sprites/effects/functions';
+import Projectiles from 'entities/projectiles/projectiles';
 
 export default class Attacks {
 

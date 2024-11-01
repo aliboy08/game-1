@@ -1,6 +1,6 @@
-import sprites_loader from '../../sprites/loader';
-import Debugger from '../../components/debugger';
-import Health_Bar from '../../components/health_bar';
+import sprites_loader from 'sprites/loader';
+import Debugger from 'components/debugger';
+import Health_Bar from 'components/health_bar';
 
 export default class Monster {
 
@@ -50,13 +50,10 @@ export default class Monster {
         this.action_complete = true;
         
         this.is_hit = false;
-
-        this.debugger = new Debugger(this);
-
         this.last_frame = false;
-
         this.with_collision = true;
 
+        // this.debugger = new Debugger(this);
         this.health_bar = new Health_Bar(this);
     }
     

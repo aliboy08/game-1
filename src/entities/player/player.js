@@ -1,12 +1,12 @@
 import Movement from './movement';
 import Attacks from './attacks';
 import Controls from './controls';
-import sprites_loader from '../../sprites/loader';
-import Debugger from '../../components/debugger';
-import { draw_sprites_player, update_sprites_player } from '../../sprites/player/functions';
-import { get_bounds } from '../../lib/functions';
+import sprites_loader from 'sprites/loader';
+import { draw_sprites_player, update_sprites_player } from 'sprites/player/functions';
+import { get_bounds } from 'lib/functions';
 
-import Health_Bar from '../../components/health_bar';
+import Debugger from 'components/debugger';
+import Health_Bar from 'components/health_bar';
 
 export default class Player {
 

@@ -1,5 +1,3 @@
-import { player_land } from '../player/functions';
-
 export function platform_collision(players, platforms){
     for( const player of players ) {
         for( const platform of platforms ) {
@@ -20,6 +18,9 @@ function platform_stand_over(player, platform){
     let platform_y = platform.bounds.top - player.height;
 
     if( player.position.y >= platform_y ) {
-        player_land(player, platform_y)
+        // land
+        player.position.y = platform_y;
+        player.velocity.y = 0;
+        player.is_grounded = true;
     }
 }
