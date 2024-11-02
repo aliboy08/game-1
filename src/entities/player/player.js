@@ -4,8 +4,6 @@ import Controls from './controls';
 import sprites_loader from 'sprites/loader';
 import { draw_sprites_player, update_sprites_player } from 'sprites/player/functions';
 import { get_bounds } from 'lib/functions';
-
-import Debugger from 'components/debugger';
 import Health_Bar from 'components/health_bar';
 
 export default class Player {
@@ -36,10 +34,12 @@ export default class Player {
             y: 0,
         }
         
-        this.jump_force = 550;
+        this.jump_force = 600;
         
         this.animation_timer = 0;
+
         this.sprites = sprites_loader(this.model, 'player');
+
         this.sprites_offset = this.sprites.offset ?? {
             y: 50,
             left: {
@@ -67,6 +67,9 @@ export default class Player {
     }
     
     update(time, ctx){
+
+        // console.log(this.velocity.y)
+        
         this.bounds = get_bounds(this);
         this.movement.update(time);
         this.update_sprite(time);
@@ -84,7 +87,6 @@ export default class Player {
         this.attacks.draw(ctx);
 
         if( this.health_bar ) this.health_bar.draw(ctx);
-        if( this.debugger ) this.debugger.draw(ctx);
     }
 
     update_sprite(time){

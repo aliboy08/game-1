@@ -1,133 +1,114 @@
+import Stage from 'environment/stage';
 import Player from 'entities/player/player';
-import Monster from 'entities/monster/monster';
-import Platform from 'entities/platform/platform';
-import Floor from 'environment/floor';
-import { platform_collision } from 'entities/platform/functions';
-import { apply_gravity } from 'components/gravity';
-import { apply_bounds } from 'components/bounds';
+import Enemy from 'entities/enemies/enemy';
+import Item from 'entities/item/item';
 import { objects_collision } from 'components/collision';
 // import FPS_Counter from 'components/fps_counter';
 import { remove_item } from 'lib/functions';
+import Debugger from 'components/debugger';
+
+const debug = {
+    players: true,
+    enemies: true,
+    items: true,
+}
+
+const frame_time = {
+    previous: 0,
+    seconds_passed: 0,
+}
 
 window.addEventListener('load', ()=>{
-
+    
     const canvas = document.querySelector('canvas');
     canvas.width = 1000;
     canvas.height = 500;
     
     const ctx = canvas.getContext('2d');
-    console.log(ctx)
     
     // debug outline
     ctx.strokeStyle = "green";
-    
+        
     // fix scaling artifacts
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
     
-    const platforms = [
-        new Platform({ x: 0, y: 100 }),
-        new Platform({ x: 400, y: 100 }),
-        new Platform({ x: 800, y: 100 }),
-
-        new Platform({ x: 200, y: 200 }),
-        new Platform({ x: 500, y: 200 }),
-        new Platform({ x: 900, y: 200 }),
-
-        new Platform({ x: 100, y: 300 }),
-        new Platform({ x: 300, y: 300 }),
-        new Platform({ x: 650, y: 300 }),
-
-        new Platform({ x: 0, y: 400 }),
-        new Platform({ x: 450, y: 400 }),
-        new Platform({ x: 750, y: 400 }),
-    ];
+    const stage = new Stage(canvas);
     
-    const monsters = [
-        new Monster({
-            model: 'Orc_Warrior',
-            x: 400,
-            y: canvas.height,
-        }),
-        new Monster({
-            model: 'Orc_Warrior',
-            direction: 'right',
-            x: 560,
-        }),
-        new Monster({
-            model: 'Orc_Shaman',
-            x: 20,
-        }),
-        new Monster({
-            model: 'Orc_Shaman',
-            direction: 'right',
-            x: 120,
-        }),
-        new Monster({
-            model: 'Orc_Berserk',
-            x: 700,
-        }),
-        new Monster({
-            model: 'Orc_Berserk',
-            direction: 'right',
-            x: 800,
-        }),
-    ];
-
-    const players = [
-        // new Player({
-        //     model: 'Shinobi',
-        // }),
-        // new Player({
-        //     model: 'Samurai',
-        //     x: 500,
-        // }),
-        new Player({
-            model: 'Fighter',
-            x: 200,
-            y: canvas.height
-        }),
-    ];
-
-    players.forEach(entity=>{
-        entity.attacks.targets = monsters;
-    });
-    
-    let frame_time = {
-        previous: 0,
-        seconds_passed: 0,
+    const entities = {
+        players: [
+            // new Player({
+            //     model: 'Shinobi',
+            // }),
+            // new Player({
+            //     model: 'Samurai',
+            //     x: 500,
+            // }),
+            new Player({
+                model: 'Fighter',
+                x: 200,
+                // y: canvas.height
+            }),
+        ],
+        enemies: [
+            new Enemy({
+                model: 'Orc_Warrior',
+                x: 400,
+                // y: canvas.height,
+            }),
+            // new Enemy({
+            //     model: 'Orc_Warrior',
+            //     direction: 'right',
+            //     x: 560,
+            // }),
+            // new Enemy({
+            //     model: 'Orc_Shaman',
+            //     x: 20,
+            // }),
+            // new Enemy({
+            //     model: 'Orc_Shaman',
+            //     direction: 'right',
+            //     x: 120,
+            // }),
+            // new Enemy({
+            //     model: 'Orc_Berserk',
+            //     x: 700,
+            // }),
+            // new Enemy({
+            //     model: 'Orc_Berserk',
+            //     direction: 'right',
+            //     x: 800,
+            // }),
+        ],
+        items: [
+            new Item('health'),
+            new Item('mana', {x: 100}),
+            new Item('powerup', {x: 300} ),
+        ],
     }
+    stage.entities.push(...entities.players)
+    stage.entities.push(...entities.enemies)
+    stage.entities.push(...entities.items)
+
+    entities.players.forEach(player=>{
+        player.attacks.targets = entities.enemies;
+    });
+
+    entities.items.forEach(item=>{
+        item.looters = entities.players;
+    });
+
+    const collision_entities = [];
+    collision_entities.push(...entities.players)
+    collision_entities.push(...entities.enemies)
     
-    const environment = [
-        new Floor(ctx),
-    ];
+    function init(){
+        requestAnimationFrame(frame);
+        debugger_init();
+        cleanup_removed_items();
+    }
+    init();
 
-    const draw_items = [
-        environment,
-        platforms,
-        monsters,
-        players,
-    ];
-
-    const update_items = [
-        monsters,
-        players,
-    ];
-    
-    const collision_items = [];
-    collision_items.push(...monsters)
-    collision_items.push(...players)
-
-    const apply_gravity_items = [
-        monsters,
-        players,
-    ];
-
-    const apply_bounds_items = [
-        monsters,
-        players,
-    ];
-    
     function frame(time){
         // for consistent fps on different refresh rates
         frame_time.seconds_passed = (time - frame_time.previous) / 1000;
@@ -138,48 +119,53 @@ window.addEventListener('load', ()=>{
     }
     
     function update(){
+        stage.update(frame_time, ctx);
 
-        // gravity
-        apply_gravity_items.forEach(group=>{
-            apply_gravity(group, frame_time);
-        })
-
-        // top, right, left, bottom
-        apply_bounds_items.forEach(group=>{
-            apply_bounds(group, canvas);
-        })
-        
-        // collision
-        platform_collision(players, platforms);
-        platform_collision(monsters, platforms);
-        objects_collision(collision_items);
-
-        update_items.forEach(group=>{
-            group.forEach(item=>{
-                item.update(frame_time, ctx);
-            })
-        })
+        // collision between players & enemies
+        objects_collision(collision_entities);
     }
     
     function draw(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        draw_items.forEach(group=>{
-            group.forEach(item=>item.draw(ctx));
-        })
+        stage.draw(ctx);
+        debugger_draw();
     }
 
-    requestAnimationFrame(frame);
-
-    // cleanup on remove
-    monsters.forEach(item=>{
-        item.on_remove = ()=>{
-            remove_item(monsters, item);
-            remove_item(draw_items, item);
-            remove_item(update_items, item);
-            remove_item(collision_items, item);
-            remove_item(apply_bounds_items, item);
-            remove_item(apply_gravity_items, item);
+    function debugger_init(){
+        for( const type in debug ) {
+            if( !debug[type] ) continue;
+            entities[type].forEach(entity=>{
+                entity.debugger = new Debugger(entity);
+            })
         }
-    });
+    }
+
+    function debugger_draw(){
+        for( const type in debug ) {
+            if( !debug[type] ) continue;
+            entities[type].forEach(entity=>{
+                entity.debugger.draw(ctx);
+            })
+        }
+    }
+
+    function cleanup_removed_items(){
+        // enemies
+        entities.enemies.forEach(entity=>{
+            entity.on_remove = ()=>{
+                remove_item(collision_entities, entity);
+                remove_item(entities.enemies, entity);
+                remove_item(stage.entities, entity);
+            }
+        });
+
+        // items
+        entities.items.forEach(entity=>{
+            entity.on_remove = ()=>{
+                remove_item(entities.items, entity);
+                remove_item(stage.entities, entity);
+            }
+        });
+    }
     
 })

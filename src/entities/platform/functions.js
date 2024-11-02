@@ -1,26 +1,27 @@
-export function platform_collision(players, platforms){
-    for( const player of players ) {
+import { get_bounds } from 'lib/functions';
+
+export function platform_collision(entities, platforms){
+    for( const entity of entities ) {
         for( const platform of platforms ) {
-            platform_stand_over(player, platform);
+            platform_stand_over(entity, platform);
         } 
     }
 }
 
-function platform_stand_over(player, platform){
-
-    let is_falling = player.velocity.y > 0;
+function platform_stand_over(entity, platform){
+    
+    let is_falling = entity.velocity.y > 0;
     if( !is_falling ) return;
     
-    if( player.bounds.right < platform.bounds.left ) return;
-    if( player.bounds.left > platform.bounds.right ) return;
-    if( player.bounds.bottom > platform.bounds.top ) return;
+    if( entity.bounds.right < platform.bounds.left ) return;
+    if( entity.bounds.left > platform.bounds.right ) return;
+    if( entity.bounds.bottom > platform.bounds.top ) return;
 
-    let platform_y = platform.bounds.top - player.height;
-
-    if( player.position.y >= platform_y ) {
-        // land
-        player.position.y = platform_y;
-        player.velocity.y = 0;
-        player.is_grounded = true;
+    let platform_y = platform.position.y - entity.height;
+    
+    if( entity.position.y >= platform_y ) {
+        entity.position.y = platform_y;
+        entity.is_grounded = true;
+        entity.velocity.y = 0;
     }
 }

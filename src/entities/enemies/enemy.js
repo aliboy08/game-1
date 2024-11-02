@@ -1,8 +1,7 @@
 import sprites_loader from 'sprites/loader';
-import Debugger from 'components/debugger';
 import Health_Bar from 'components/health_bar';
 
-export default class Monster {
+export default class Enemy {
 
     constructor(options){
 
@@ -52,8 +51,6 @@ export default class Monster {
         this.is_hit = false;
         this.last_frame = false;
         this.with_collision = true;
-
-        // this.debugger = new Debugger(this);
         this.health_bar = new Health_Bar(this);
     }
     
@@ -92,7 +89,6 @@ export default class Monster {
         }
 
         if( this.health_bar ) this.health_bar.draw(ctx);
-        if( this.debugger ) this.debugger.draw(ctx);
         
     }
 

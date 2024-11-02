@@ -1,4 +1,5 @@
-import { get_bounds } from 'lib/functions';
+import { get_bounds, stand_over } from 'lib/functions';
+import { gravity } from 'components/gravity';
 
 const img = new Image();
 img.src = 'src/sprites/environment/nature/PNG/tiles/tile105.png';
@@ -18,19 +19,10 @@ export default class Platform {
         this.width = options.width ?? 96;
         this.height = options.height ?? 10;
         this.bounds = get_bounds(this);
-        
-        // this.cols = this.width / img.width;
-        // this.repeat_x = Math.round(this.width / img.width);
-        this.repeat_x = Math.round(this.width / img.width);    
+        this.repeat_x = Math.round(this.width / img.width);
     }
 
-    update(){}
-
     draw(ctx){
-        
-        // ctx.beginPath();
-        // ctx.rect(this.position.x, this.position.y, this.width, this.height);
-        // ctx.stroke();
         
         for( let i = 0; i < this.repeat_x; i++ ) {
             ctx.drawImage(
@@ -40,6 +32,34 @@ export default class Platform {
             );
         }
 
+        // if( this.landing ) {
+        //     ctx.save();
+        //     ctx.strokeStyle = 'red';
+        //     ctx.beginPath();
+        //     ctx.rect(this.position.x, this.position.y, this.width, this.height);
+        //     ctx.stroke();
+        //     ctx.restore();
+        // }
+        
+    }
+
+    collision(entities){
+        
+        entities.forEach(entity=>{
+    
+            const is_falling = entity.velocity.y > 0;
+            if( !is_falling ) return;
+            
+            if( entity.bounds.right < this.bounds.left ) return;
+            if( entity.bounds.left > this.bounds.right ) return;
+            if( entity.bounds.bottom > this.bounds.top ) return;
+        
+            if( entity.position.y >= this.position.y - entity.height ) {
+                stand_over(entity, this)
+            }
+            
+        })
+        
     }
     
 }

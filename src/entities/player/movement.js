@@ -5,7 +5,7 @@ export default class Movement {
 
         this.player.is_moving = false;
         this.player.is_jumping = false;
-
+        
         this.is_running = false;
         this.toggle_run = false;
     }
@@ -36,12 +36,10 @@ export default class Movement {
         }
     }
 
-    crouch(){
-        // to do... 
-    }
-
     jump(){
+
         if( this.player.is_jumping ) return;
+
         this.player.is_jumping = true;
         this.player.state = 'Jump';
         this.player.velocity.y = - this.player.jump_force;

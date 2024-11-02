@@ -43,7 +43,7 @@ export default class Controls {
     }
 
     crouch(){
-        this.player.movement.crouch();
+        // this.player.movement.crouch();
     }
 
     jump(){

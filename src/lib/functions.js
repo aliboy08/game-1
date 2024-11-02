@@ -55,3 +55,29 @@ export function cleanup_removed(arrays){
         }
     }
 }
+
+export function stand_over(entity, platform){
+    entity.position.y = platform.position.y - entity.height;
+    entity.is_grounded = true;
+    entity.velocity.y = 0;
+}
+
+export function is_colliding(a, b){
+
+    if( a.bounds.top > b.bounds.bottom ) return false;
+    if( a.bounds.bottom < b.bounds.top ) return false;
+
+    if( a.bounds.left < b.bounds.right &&
+        a.bounds.right > b.bounds.right ) {
+        // a - right
+        return 'right';
+    } 
+
+    if( a.bounds.right > b.bounds.left &&
+        a.bounds.left < b.bounds.left ) {
+        // a - left
+        return 'left';
+    }
+    
+    return false;
+}

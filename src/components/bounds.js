@@ -1,37 +1,38 @@
-const ground_height = 50;
+const ground_height = 48;
 
-export function apply_bounds(players, canvas){
+function apply_bounds(entities, stage){
 
-    const floor = canvas.height - ground_height;
+    const floor = stage.height - ground_height;
 
-    for( const player of players ) {
+    for( const entity of entities ) {
 
         // top
         // if (player.position.y < 0 ) {
         //     player.position.y = 0;
         // }
+
         // bottom
-        if (player.position.y + player.height >= floor ) {
-            player.position.y = floor - player.height;
-            player.velocity.y = 0;
-            player.is_grounded = true;
+        if (entity.position.y + entity.height >= floor ) {
+            entity.position.y = floor - entity.height;
+            entity.velocity.y = 0;
+            entity.is_grounded = true;
         }
         
         // left
-        if( player.direction == 'left' ) {
-            if( player.position.x <= 0 ) {
-                player.position.x = 0;
-                player.velocity.x = 0;
+        if( entity.direction == 'left' ) {
+            if( entity.position.x <= 0 ) {
+                entity.position.x = 0;
+                entity.velocity.x = 0;
             }
         }
         // right
-        else if ( player.direction == 'right' ) {
+        else if ( entity.direction == 'right' ) {
 
-            const edge_right = canvas.width - player.width;
+            const edge_right = stage.width - entity.width;
 
-            if( player.position.x >= edge_right ) {
-                player.position.x = edge_right;
-                player.velocity.x = 0
+            if( entity.position.x >= edge_right ) {
+                entity.position.x = edge_right;
+                entity.velocity.x = 0
             }
         }
         

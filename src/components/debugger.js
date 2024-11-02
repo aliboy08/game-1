@@ -43,6 +43,7 @@ export default class Debugger {
     }
 
     draw_attack(ctx){
+        
         if( !this.entity.attacks ) return;
         if( !this.entity.attacks.action ) return;
 

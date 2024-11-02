@@ -1,3 +1,5 @@
+import { stand_over } from 'lib/functions';
+
 const floor_height = 48;
 
 const img = new Image();
@@ -7,24 +9,26 @@ img.height = 48;
 
 export default class Floor {
 
-    constructor(ctx){
+    constructor(stage){
 
-        this.width = ctx.canvas.width;
+        this.width = stage.width;
         this.height = floor_height;
 
         this.position = {
             x: 0,
-            y: ctx.canvas.height - this.height,
+            y: stage.height - this.height,
         }
-
-        // this.cols = this.width / img.width;
-        this.repeat_x = Math.round(this.width / img.width);
+        
+        this.image_repeat_x = Math.round(this.width / img.width);
     }
 
+    // update(entities){
+    //     this.collision(entities);
+    // }
+
     draw(ctx){
-        
-        // repeat tiles
-        for( let i = 0; i < this.repeat_x; i++ ) {
+
+        for( let i = 0; i < this.image_repeat_x; i++ ) {
             ctx.drawImage(
                 img,
                 this.position.x + (img.width * i),
@@ -33,4 +37,13 @@ export default class Floor {
         }
     }
 
+    collision(entities){
+        entities.forEach(entity=>{
+            if( entity.velocity.y < 0 ) return; // jumping
+            if( entity.bounds.bottom >= this.position.y ) {
+                stand_over(entity, this);
+            }
+        })
+    }
+    
 }
