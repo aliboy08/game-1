@@ -1,7 +1,7 @@
 import { get_bounds, stand_over } from 'lib/functions';
 
 const img = new Image();
-img.src = 'sprites/environment/nature/PNG/tiles/tile105.png';
+img.src = 'sprites/environment/nature/png/tiles/tile105.png';
 img.width = 48;
 img.height = 48;
 
