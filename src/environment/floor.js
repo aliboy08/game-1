@@ -2,11 +2,6 @@ import { stand_over } from 'lib/functions';
 
 const floor_height = 48;
 
-const img = new Image();
-img.src = 'sprites/environment/nature/png/tiles/tile45.png';
-img.width = 48;
-img.height = 48;
-
 export default class Floor {
 
     constructor(stage){
@@ -18,8 +13,13 @@ export default class Floor {
             x: 0,
             y: stage.height - this.height,
         }
+
+        this.img = new Image();
+        this.img.src = 'sprites/environment/tile45.png';
+        this.img.width = 48;
+        this.img.height = 48;
         
-        this.image_repeat_x = Math.round(this.width / img.width);
+        this.image_repeat_x = Math.round(this.width / this.img.width);
     }
 
     // update(entities){
@@ -30,8 +30,8 @@ export default class Floor {
 
         for( let i = 0; i < this.image_repeat_x; i++ ) {
             ctx.drawImage(
-                img,
-                this.position.x + (img.width * i),
+                this.img,
+                this.position.x + (this.img.width * i),
                 this.position.y,
             );
         }

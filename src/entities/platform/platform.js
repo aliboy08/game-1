@@ -1,10 +1,5 @@
 import { get_bounds, stand_over } from 'lib/functions';
 
-const img = new Image();
-img.src = 'sprites/environment/nature/png/tiles/tile105.png';
-img.width = 48;
-img.height = 48;
-
 const y_offset = 35;
 
 export default class Platform {
@@ -18,15 +13,22 @@ export default class Platform {
         this.width = options.width ?? 96;
         this.height = options.height ?? 10;
         this.bounds = get_bounds(this);
-        this.repeat_x = Math.round(this.width / img.width);
+
+        const img = new Image();
+        img.src = 'sprites/environment/tile105.png';
+        img.width = 48;
+        img.height = 48;
+        this.img = img;
+
+        this.repeat_x = Math.round(this.width / this.img.width);
     }
 
     draw(ctx){
         
         for( let i = 0; i < this.repeat_x; i++ ) {
             ctx.drawImage(
-                img,
-                this.position.x + (img.width * i),
+                this.img,
+                this.position.x + (this.img.width * i),
                 this.position.y - y_offset,
             );
         }
