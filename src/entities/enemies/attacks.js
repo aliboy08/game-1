@@ -4,7 +4,7 @@ import Hit_Effect from 'components/hit_effect';
 const push_force = 5;
 
 const hit_spark = sprite_images_loader({
-    base_image_path: 'public/sprites/effects/hit_spark_1/8200_',
+    base_image_path: 'sprites/effects/hit_spark_1/8200_',
     frames_count: 12,
     image_index_start: 0,
     leading_zero: false,

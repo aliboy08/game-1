@@ -60,5 +60,5 @@ const data = {
 };
 
 export default function get_players_data(){
-    return sprite_images_loader_2(data, 'public/sprites/player');
+    return sprite_images_loader_2(data, 'sprites/player');
 }
