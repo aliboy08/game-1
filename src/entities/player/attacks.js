@@ -9,7 +9,7 @@ const attack_2 = {
 const push_force = 5;
 
 const hit_spark_2 = sprite_images_loader({
-    base_image_path: 'src/sprites/effects/hit_spark_2/8213_',
+    base_image_path: 'public/sprites/effects/hit_spark_2/8213_',
     frames_count: 12,
     image_index_start: 0,
     leading_zero: false,

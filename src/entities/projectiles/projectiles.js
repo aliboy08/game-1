@@ -8,12 +8,12 @@ import Hit_Effect from 'components/hit_effect';
 const push_force = 5;
 
 const water_projectile = sprite_images_loader({
-    base_image_path: 'src/sprites/effects/water_projectile/water1000',
+    base_image_path: 'public/sprites/effects/water_projectile/water1000',
     frames_count: 20,
 });
 
 const hit_spark_2 = sprite_images_loader({
-    base_image_path: 'src/sprites/effects/hit_spark_2/8213_',
+    base_image_path: 'public/sprites/effects/hit_spark_2/8213_',
     frames_count: 12,
     image_index_start: 0,
     leading_zero: false,

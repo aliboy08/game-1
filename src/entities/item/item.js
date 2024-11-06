@@ -32,9 +32,9 @@ const items = {
         }
     },
 }
-items.health.sprite.img.src = 'src/sprites/items/potions/Icon21.png';
-items.mana.sprite.img.src = 'src/sprites/items/potions/Icon9.png';
-items.powerup.sprite.img.src = 'src/sprites/items/potions/Icon43.png';
+items.health.sprite.img.src = 'public/sprites/items/potions/Icon21.png';
+items.mana.sprite.img.src = 'public/sprites/items/potions/Icon9.png';
+items.powerup.sprite.img.src = 'public/sprites/items/potions/Icon43.png';
 
 export default class Item {
     

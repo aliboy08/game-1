@@ -1,8 +1,7 @@
 import { get_bounds, stand_over } from 'lib/functions';
-import { gravity } from 'components/gravity';
 
 const img = new Image();
-img.src = 'src/sprites/environment/nature/PNG/tiles/tile105.png';
+img.src = 'public/sprites/environment/nature/PNG/tiles/tile105.png';
 img.width = 48;
 img.height = 48;
 
@@ -31,14 +30,8 @@ export default class Platform {
                 this.position.y - y_offset,
             );
         }
-
-        // ctx.save();
-        // ctx.strokeStyle = 'red';
-        // ctx.beginPath();
-        // ctx.rect(this.position.x, this.position.y, this.width, this.height);
-        // ctx.stroke();
-        // ctx.restore();
         
+        // ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
     }
 
     collision(entities){

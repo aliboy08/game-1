@@ -219,5 +219,5 @@ const data = {
 };
 
 export default function get_enemies_data(){
-    return sprite_images_loader_2(data, 'src/sprites/enemies');
+    return sprite_images_loader_2(data, 'public/sprites/enemies');
 }

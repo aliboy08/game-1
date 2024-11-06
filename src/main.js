@@ -4,7 +4,7 @@ import Enemy from 'entities/enemies/enemy';
 import Debugger from 'components/debugger';
 import { objects_collision } from 'components/collision';
 import { remove_item, get_random_min_max, get_random_item } from 'lib/functions';
-import { gamepad_input_scan } from 'components/gamepad';
+// import { gamepad_input_scan } from 'components/gamepad';
 
 const debug = {
     players: false,
@@ -16,7 +16,7 @@ const frame_time = {
     seconds_passed: 0,
 }
 
-let gamepad_ready = false;
+// let gamepad_ready = false;
 let canvas;
 let ctx;
 let stage;
@@ -41,7 +41,6 @@ function init_game(){
     init_enemies();
     collission_entities_init();
     init_gamepad();
-    // init_debugger();
 }
 
 function init_player_1(){
@@ -194,9 +193,9 @@ function frame(time){
     frame_time.previous = time;
     requestAnimationFrame(frame);
     
-    if( gamepad_ready ) {
-        gamepad_input_scan(navigator.getGamepads()[0], p1);
-    }
+    // if( gamepad_ready ) {
+    //     gamepad_input_scan(navigator.getGamepads()[0], p1);
+    // }
 
     update(frame_time);
     draw(ctx);
