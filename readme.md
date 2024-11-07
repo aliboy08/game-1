@@ -60,9 +60,6 @@ Link: https://aliboy08.github.io/game-1/
 * switch direction on stuck
 * target
 * attack
-
 * enemy spawn
-* goal, game end - set amount of kills
 
-* character select
 * controller - gamepad api
